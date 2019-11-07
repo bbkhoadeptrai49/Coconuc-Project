@@ -1,0 +1,33 @@
+<?php
+
+namespace App;
+
+use Illuminate\Notifications\Notifiable;
+use Illuminate\Database\Eloquent\Model;
+
+class Categories extends Model
+{
+    use Notifiable;
+
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected $fillable = ['category_name'];
+
+
+    //Table name
+    protected $table = 'categories';
+
+    //Primary key
+    protected $primaryKey = 'id';
+
+    //Timestamps
+    public $timestamps = true;
+
+    public function type(){
+        return $this->hasMany('App\Categories','types_categories_id_foreign','id');
+    }
+
+}
