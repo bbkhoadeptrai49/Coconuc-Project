@@ -70,7 +70,8 @@ return [
             'port' => env('DB_PORT', '5432'),
             'database' => env('DB_DATABASE', 'd98l7rdj8o7psr'),
             'username' => env('DB_USERNAME', 'plnvitnvewykak'),
-            'password' => env('DB_PASSWORD', '2a43e5b0692c8e9b597e6121a84720618898a9dd4d51466dcc228bc8a2746ffe'),
+            'password' => env('DB_PASSWORD', '
+2a43e5b0692c8e9b597e6121a84720618898a9dd4d51466dcc228bc8a2746ffe'),
             'charset' => 'utf8',
             'prefix' => '',
             'prefix_indexes' => true,
