@@ -16,9 +16,8 @@ class CreateShopsTable extends Migration
         Schema::create('shops', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedBigInteger('shops_user_id_foreign');
-            $table->unsignedBigInteger('shops_product_id_foreign');
+            $table->string('shop_name');
             $table->foreign('shops_user_id_foreign')->references('id')->on('users');
-            $table->foreign('shops_product_id_foreign')->references('id')->on('products');
             $table->timestamps();
         });
     }
