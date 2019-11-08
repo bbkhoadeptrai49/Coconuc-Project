@@ -40,7 +40,10 @@
         "classmap": [
             "database/seeds",
             "database/factories"
-        ]
+        ],
+        "psr-0": {
+            "ComposerScript\\Installer" : ""
+        }
     },
     "autoload-dev": {
         "psr-4": {
@@ -64,6 +67,9 @@
         "php artisan clear-compiled",
         "php artisan optimize",
         "chmod -R 777 public/"
+        ],
+        "post-package-update": [
+            "ComposerScript\\Installer::postPackageUpdate"
         ]
     }
 
