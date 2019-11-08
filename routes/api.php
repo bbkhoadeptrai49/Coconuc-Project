@@ -25,6 +25,8 @@ Route::get('user', 'api\UserController@index');
 Route::post('register', 'api\UserController@register');
 Route::post('reset-password', 'api\ResetPasswordController@sendMail');
 Route::put('reset-password/{token}', 'api\ResetPasswordController@reset');
+Route::put('shop/{id}', 'api\UserController@createShop');
+Route::put('user/{id}', 'api\UserController@update');
 
 Route::group(['middleware' => 'auth:api'], function() {
     Route::post('details', 'api\UserController@details');

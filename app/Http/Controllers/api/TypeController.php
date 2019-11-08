@@ -75,4 +75,5 @@ class TypeController extends Controller
     	$type = Types::where('types_categories_id_foreign', $category)->get();
     	return response()->json($type);
     }
+
 }

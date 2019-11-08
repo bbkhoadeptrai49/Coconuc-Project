@@ -24,7 +24,7 @@ class Categories extends Model
     protected $primaryKey = 'id';
 
     //Timestamps
-    public $timestamps = true;
+    public $timestamps = false;
 
     public function type(){
         return $this->hasMany('App\Categories','types_categories_id_foreign','id');

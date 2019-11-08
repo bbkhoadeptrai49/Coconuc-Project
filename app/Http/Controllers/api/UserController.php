@@ -115,4 +115,42 @@ class UserController extends Controller
         return User::find($id);
     }
 
+    public function createShop($id, Request $request){
+        $validator = Validator::make($request->all(),
+            [
+                'shops' => 'required',
+               
+            ]
+        );
+
+        $user = User::find($id);
+        $user->shops = $request['shops'];
+        $user->save();
+
+        return response()->json($user);        
+    }
+
+    public function update(Request $request, $id){
+        $user = User::find($id);
+        
+        $validator = Validator::make($request->all(),
+            [
+                
+            ]
+        );
+
+        if ($validator->fails()) {
+            return response()->json(
+                [
+                    'error' => $validator->errors()
+                ], 400);
+        }
+
+
+        $input = $request->all();
+        $user->update($input);
+
+        return response()->json($user);
+    }
+
 }

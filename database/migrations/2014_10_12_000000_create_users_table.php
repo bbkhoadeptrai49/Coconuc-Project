@@ -22,7 +22,9 @@ class CreateUsersTable extends Migration
             $table->string('phone');
             $table->boolean('sex');
             $table->date('birthday');
-            $table->string('url_images');
+            $table->string('url_images')->nullable();;
+            $table->string('address');
+            $table->string('shops')->nullable();;
             $table->rememberToken();
             $table->timestamps();
         });

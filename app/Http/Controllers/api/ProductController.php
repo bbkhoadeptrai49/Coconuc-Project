@@ -11,7 +11,10 @@ class ProductController extends Controller
 {
    
 	
-   	
+   	public function index(){
+        return Products::all();
+    }
+
     public function show($id){
     	return Products::find($id);
     }

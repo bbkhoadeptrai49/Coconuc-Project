@@ -24,7 +24,7 @@ class Types extends Model
     protected $primaryKey = 'id';
 
     //Timestamps
-    public $timestamps = true;
+    public $timestamps = false;
 
     public function category(){
     	return $this->belongsTo('Categories', 'id', 'types_categories_id_foreign');
