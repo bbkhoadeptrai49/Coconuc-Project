@@ -32,10 +32,10 @@ Route::put('user/{id}', 'api\UserController@update');
 // Route::get('user-products-sell/{user}', 'api\UserController@getShop');
 
 
-Route::get('product', 'api\ProductController@index');
-Route::get('product/{id}', 'api\ProductController@show');
-Route::post('product', 'api\ProductController@store');
-Route::put('product/{id}', 'api\ProductController@update');
+Route::get('product','api\ProductController@index');
+Route::get('product/{id}','api\ProductController@show');
+Route::post('product','api\ProductController@store');
+Route::put('product/{id}','api\ProductController@update');
 Route::delete('product/{id}', 'api\ProductController@delete');
 
 
@@ -53,6 +53,6 @@ Route::delete('types/{id}', 'api\TypeController@delete');
 
 Route::get('types-category/{category}', 'api\TypeController@getTypeByCategory');
 
-Route::get('images/{id}', 'api\ImageController@getImages');
+// Route::get('images/{id}', 'api\ImageController@getImages');
 
 
