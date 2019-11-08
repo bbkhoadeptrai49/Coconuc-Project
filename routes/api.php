@@ -13,11 +13,9 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
-});
-
-
+// Route::middleware('auth:api')->get('/user', function (Request $request) {
+//     return $request->user();
+// });
 
 Route::post('login', 'api\UserController@login');
 Route::get('user/{id}', 'api\UserController@getUser');
@@ -28,10 +26,10 @@ Route::put('reset-password/{token}', 'api\ResetPasswordController@reset');
 Route::put('shop/{id}', 'api\UserController@createShop');
 Route::put('user/{id}', 'api\UserController@update');
 
-Route::group(['middleware' => 'auth:api'], function() {
-    Route::post('details', 'api\UserController@details');
-});
-Route::get('user-products-sell/{user}', 'api\UserController@getShop');
+// Route::group(['middleware' => 'auth:api'], function() {
+//     Route::post('details', 'api\UserController@details');
+// });
+// Route::get('user-products-sell/{user}', 'api\UserController@getShop');
 
 
 Route::get('product', 'api\ProductController@index');
