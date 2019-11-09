@@ -17,5 +17,7 @@ class Products extends Model
     //Timestamps
     public $timestamps = true;
 
-
+    public function types(){
+    	return $this->belongsTo('App\Types','types_product_id_foreign', 'id');
+    }
 }

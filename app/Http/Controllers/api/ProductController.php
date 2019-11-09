@@ -5,6 +5,8 @@ namespace App\Http\Controllers\api;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Products;
+use App\Images;
+use App\Categories;
 use Validator;
 
 class ProductController extends Controller
@@ -25,7 +27,8 @@ class ProductController extends Controller
             [
                 'product_name' => 'required|min:2|max:190',
                 'description' => 'required|min:10',
-                'price' => 'required|numeric'
+                'price' => 'required|numeric',
+                'url' => 'required'
             ]
         );
 
@@ -37,8 +40,30 @@ class ProductController extends Controller
         }
 
         $product = Products::create($request->all());
+        $Images = new Images;
+        $Images->images_product_id_foreign = $product->id;
 
-    	return response()->json($product, 201);
+
+        if($request->hasFile('url')){
+            $file = $request->file('url');
+            $name = $file->getClientOriginalName();
+            
+            $img = str_random(5)."_".$name;
+            while (file_exists("Images/".$img)) {
+                $img = str_random(5)."_".$name;
+            }
+
+            $file->move("Images", $img);
+
+            $Images->url = $img;
+        
+        } else {
+            $Images->url = 'CYrBY_ac1.png';
+        }
+
+        $Images->save();
+
+    	return response()->json($product, 200);
     }
 	
 
@@ -48,7 +73,8 @@ class ProductController extends Controller
         $validator = Validator::make($request->all(),
             [
                 'product_name' => 'required|min:2|max:190',
-                'price' => 'required|numeric'
+                'price' => 'required|numeric',
+                'quantity' => 'required|numeric'
             ]
         );
 
@@ -69,14 +95,32 @@ class ProductController extends Controller
     	$input = $request->all();
     	$product->update($input);
 
-    	return $product;
+    	return response()->json($product, 200);
     }
+
 
     public function delete(Request $request, $id) {
     	$product = Products::find($id);
     	$product->delete();
 
-    	return 204;
+    	return response()->json([
+                    'success' => 'successfully'
+                ], 200);
+    }
+
+    public function getByType($typeid){
+        $product_list = Products::where('products_type_id_foreign', $typeid)->get();
+        return response()->json($product_list);
+    }
+
+    public function getByShop($shopid){
+        $product_list = Products::where('products_shop_id_foreign', $shopid)->get();
+        return response()->json($product_list);
+    }
+
+    public function getByCategory($categoryid){
+        $product_list = Products::join('types', 'products.products_type_id_foreign', '=', 'types.id')->join('categories', 'categories.id', '=', 'types.types_categories_id_foreign')->where('categories.id', $categoryid)->get();
+        return response()->json($product_list);
     }
     
 }

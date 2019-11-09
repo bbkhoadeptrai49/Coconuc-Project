@@ -71,7 +71,7 @@ class TypeController extends Controller
     	return 204;
     }
 
-    public function getTypeByCategory($category){
+    public function getByCategory($category){
     	$type = Types::where('types_categories_id_foreign', $category)->get();
     	return response()->json($type);
     }

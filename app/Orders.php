@@ -4,12 +4,12 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Images extends Model
+class Orders extends Model
 {
+    protected $fillable = ['orders_user_id_foreign', 'coupon', 'address', 'costs', 'note'];
+
     //Table name
-    protected $fillable = ['url'];
-    
-    protected $table = 'images';
+    protected $table = 'orders';
 
     //Primary key
     protected $primaryKey = 'id';

@@ -35,17 +35,19 @@ class UserController extends Controller
 
             return response()->json(
                 [
-                    'success' => 'hello'.$user->name
+                    'success' => 'successfully',
+                    'userid' => $user->id
                 ],
+
+                200
                 
-                $this->successStatus
             );
         }
         else {
             return response()->json(
                 [
-                    'error' => 'Unauthorised'
-                ], 401);
+                    'faile' => 'Unauthorised'
+                ], 400);
         }
     }
 

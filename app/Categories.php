@@ -30,4 +30,8 @@ class Categories extends Model
         return $this->hasMany('App\Categories','types_categories_id_foreign','id');
     }
 
+    public function products()
+    {
+        return $this->hasManyThrough('App\Products', 'App\Types', 'types_categories_id_foreign', 'products_type_id_foreign', 'id');
+    }
 }

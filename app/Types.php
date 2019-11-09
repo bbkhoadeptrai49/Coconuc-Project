@@ -27,7 +27,11 @@ class Types extends Model
     public $timestamps = false;
 
     public function category(){
-    	return $this->belongsTo('Categories', 'id', 'types_categories_id_foreign');
+    	return $this->belongsTo('App\Categories', 'types_categories_id_foreign', 'id');
+    }
+
+    public function product(){
+        return $this->hasMany('App\Product','products_type_id_foreign', 'id');
     }
 
 }
