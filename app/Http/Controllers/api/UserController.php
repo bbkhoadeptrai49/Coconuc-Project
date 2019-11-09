@@ -9,6 +9,7 @@ use App\User;
 use Auth;
 use Validator;
 use App\Products;
+use App\Shops;
 
 
 class UserController extends Controller
@@ -105,12 +106,6 @@ class UserController extends Controller
         );
     }
 
-    public function getShop($user){
-        $product = Products::find(1)->where('products_user_id_foreign', '=', $user)->get();
-
-        return response()->json($product);
-    }
-
     public function getUser($id){
         return User::find($id);
     }
@@ -118,16 +113,24 @@ class UserController extends Controller
     public function createShop($id, Request $request){
         $validator = Validator::make($request->all(),
             [
-                'shops' => 'required',
+                'shop_name' => 'required',
                
             ]
         );
 
-        $user = User::find($id);
-        $user->shops = $request['shops'];
-        $user->save();
+        $shop = new Shops;
+        $shop->shop_name = $request['shop_name'];
+        $shop->shops_user_id_foreign = $id;
+        $shop->save();
 
-        return response()->json($user);        
+        return response()->json($shop);        
+    }
+
+    public function getShop($user){
+
+        $product = Products::find(1)->where('products_user_id_foreign', '=', $user)->get();
+
+        return response()->json($product);
     }
 
     public function update(Request $request, $id){
