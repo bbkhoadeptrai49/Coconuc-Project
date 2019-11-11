@@ -41,13 +41,26 @@ class UserController extends Controller
         )) {
             $user = Auth::user();
             // $success['token'] = $user->createToken('token')->accessToken;
-            $shop = Shops::where('shops_user_id_foreign', $user->id)->first();
+            while (Shops::where('shops_user_id_foreign', $user->id)->exists()) {
+                $shop = Shops::where('shops_user_id_foreign', $user->id)->first();
+                return response()->json(
+                [
+                    'success' => 'successfully',
+                    'userid' => $user->id,
+                    'shopID' => $shop->id
+                ],
+                200
+                
+                );
+            }
+            
+
 
             return response()->json(
                 [
                     'success' => 'successfully',
                     'userid' => $user->id,
-                    'shopID' => $shop->id
+                    'shopID' => false
                 ],
                 200
                 
