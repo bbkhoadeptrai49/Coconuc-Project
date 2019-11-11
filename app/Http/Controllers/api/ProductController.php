@@ -127,7 +127,7 @@ class ProductController extends Controller
     }
 
     public function getByCategory($categoryid){
-        $product_list = Products::join('types', 'products.products_type_id_foreign', '=', 'types.id')->join('categories', 'categories.id', '=', 'types.types_categories_id_foreign')->where('categories.id', $categoryid)->get();
+        $product_list = Products::select('products.id', 'products.product_name', 'products.price')->join('types', 'products.products_type_id_foreign', '=', 'types.id')->join('categories', 'categories.id', '=', 'types.types_categories_id_foreign')->where('categories.id', $categoryid)->get();
         return response()->json($product_list);
     }
 
