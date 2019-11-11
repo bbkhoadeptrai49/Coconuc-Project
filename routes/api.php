@@ -55,11 +55,15 @@ Route::post('images/{product}', 'api\ImageController@store');
 Route::post('images-update/{id}', 'api\ImageController@update');
 Route::delete('images/{id}', 'api\ImageController@delete');
 
-//
-Route::get('order/{user}', 'api\OrderController@getOrder');
-Route::post('order','api\OrderController@store');
-Route::delete('order/{id}', 'api\OrderController@delete');
-Route::get('order-detail/{order}','api\OrderController@getDetailOrder');
+
+Route::get('order/{id}', 'api\OrderController@getOrder');
+Route::get('order-by-user/{user}', 'api\OrderController@getOrderByUser');
+Route::get('order-detail/{order}', 'api\OrderController@getDetailOrder');
+Route::post('order/{user}','api\OrderController@store');
+//add product to details order create order
+Route::post('add-product-order/{order}/{product}', 'api\OrderController@addProductOrder');
+Route::put('update-cost-order/{order}','api\OrderController@updateCostOrder');
+//Route::delete('order/{id}', 'api\OrderController@delete');
 
 Route::get('histories/{user}','api\HistoryController@getHistory');
-Route::post('histories','api\HistoryController@store');
+

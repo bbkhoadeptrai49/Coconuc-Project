@@ -4,8 +4,108 @@ namespace App\Http\Controllers\api;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Validator;
+use App\Orders;
+use App\Products;
+use App\DetailsOrder;
+use App\Histories;
 
 class OrderController extends Controller
 {
-    //
+    
+	public function getOrder($orderid){
+		while(Orders::where('id', $orderid)->exists()) {
+			$order = Orders::where('id', $orderid)->first();
+
+			return response()->json($order);
+		}
+
+		return response()->json(['status' => false]);
+	}
+
+	public function getOrderByUser($userid){
+		while(Orders::where('orders_user_id_foreign', $userid)->exists()) {
+			$order = Orders::where('orders_user_id_foreign', $userid)->get();
+
+			return response()->json($order);
+		}
+
+		return response()->json(['status' => false]);
+	}
+
+	public function getDetailOrder($orderid){
+		while(DetailsOrder::where('details_order_oders_id_foreign', $orderid)->exists()) {
+			$order = DetailsOrder::where('details_order_oders_id_foreign', $orderid)->get();
+
+			return response()->json($order);
+		}
+
+		return response()->json(['status' => false]);
+	}
+
+    public function store(Request $request, $user){
+    	$validator = Validator::make($request->all(),
+            [
+                'adress' => 'required',
+                'costs'=>'required'
+            ]
+        );
+
+        if ($validator->fails()) {
+            return response()->json(
+                [
+                    'error' => $validator->errors()
+                ], 400);
+        }
+    	
+        $order = new Orders;
+        $order->orders_user_id_foreign = $user;
+        $order->coupon = '0';
+        $order->adresss = $request['adress'];
+        $order->note = 'Đã thanh toán';
+        $order->costs = $request['costs'];
+        $order->save();
+
+        $history = new Histories;
+        $history->histories_order_id_foreign = $order->id;
+        $history->histories_user_id_foreign = $user;
+        $history->save();
+
+    	return response()->json($order);
+    }
+
+    public function addProductOrder(Request $request, $order, $product){
+
+    	$price = Products::where('id', $product)->first();
+    	$detail = new DetailsOrder;
+    	$detail->details_order_product_id_foreign = $product;
+    	$detail->details_order_oders_id_foreign = $order;
+    	$detail->quantity = $request->quantity;
+    	$detail->price = $price->price;
+    	$detail->save();
+
+    	return response()->json(['status' => true]);
+    }
+
+    public function updateCostOrder($orderid) {
+
+    	$detail_arr = DetailsOrder::where('details_order_oders_id_foreign', $orderid)->get();
+    	$total = 0;
+    	foreach ($detail_arr as $detail) {
+       		if($detail['price'] != 0) {
+       			$total += $detail->price * $detail->quantity;
+       		}
+       	}
+
+       	while(Orders::where('id', $orderid)->exists()) {
+			$order = Orders::where('id', $orderid)->first();
+
+			$order->costs = $total;
+			$order->update();
+			return response()->json(['status' => true]);
+		}
+
+
+    	return response()->json(['status' => false]);
+    }
 }
