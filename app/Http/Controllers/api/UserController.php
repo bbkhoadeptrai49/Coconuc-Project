@@ -30,7 +30,8 @@ class UserController extends Controller
     }
 
     public function login()
-    {
+    {   
+        
         if (Auth::attempt(
             [
                 'email' => request('email'),
@@ -40,13 +41,14 @@ class UserController extends Controller
         )) {
             $user = Auth::user();
             // $success['token'] = $user->createToken('token')->accessToken;
+            $shop = Shops::where('shops_user_id_foreign', $user->id)->first();
 
             return response()->json(
                 [
                     'success' => 'successfully',
-                    'userid' => $user->id
+                    'userid' => $user->id,
+                    'shopID' => $shop->id
                 ],
-
                 200
                 
             );

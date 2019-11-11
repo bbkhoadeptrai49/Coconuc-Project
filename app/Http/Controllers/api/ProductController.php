@@ -7,6 +7,8 @@ use App\Http\Controllers\Controller;
 use Validator;
 use App\Products;
 use App\Images;
+use App\Categories;
+use App\Types;
 use Cloudder;
 
 class ProductController extends Controller
@@ -19,14 +21,17 @@ class ProductController extends Controller
     public function show($id){
     	$product = Products::find($id);
     	$img_arr = Images::where('images_product_id_foreign', $id)->get();
-    	foreach ($img_arr as $image) {
+    	$type = Types::where('types_categories_id_foreign', $product->products_type_id_foreign)->first();
+        $categories = Categories::where('id', $type->types_categories_id_foreign)->first();
+        foreach ($img_arr as $image) {
        		if($image['url'] != null) {
        			$img = Cloudder::show('images/'.$image->url);
        			$image->url = $img;
        		}
        	}
 
-    	return response()->json(['info' => $product, 'images' => $img_arr]);
+
+    	return response()->json(['info' => $product, 'images' => $img_arr, 'categoryID' => $categories->id]);
     }
 
     public function store(Request $request){
@@ -66,7 +71,7 @@ class ProductController extends Controller
 
         $Images->save();
 
-    	return response()->json(['status' => true]);
+    	return response()->json(['status' => true, 'productID' => $product->id]);
     }
 	
 
