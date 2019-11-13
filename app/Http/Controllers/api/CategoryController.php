@@ -54,14 +54,14 @@ class CategoryController extends Controller
             $category->url_images = $img;
             
         } else {
-            $->url = 'no-image_bi4whx';
+            $category->url_images = 'no-image_bi4whx';
         }
 
         $category->category_name = $request['category_name'];
 
         $category->save();
 
-        return response()->json([$category, 'status'=> true]);
+        return response()->json($category);
     }
 	
 
