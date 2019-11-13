@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddStatusToOrdersTable extends Migration
+class AddImagesToCategories extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,8 @@ class AddStatusToOrdersTable extends Migration
      */
     public function up()
     {
-        Schema::table('orders', function (Blueprint $table) {
-            $table->string('status')->nullable();
+        Schema::table('categories', function (Blueprint $table) {
+            $table->string('url_images')->nullable();
         });
     }
 
@@ -25,8 +25,8 @@ class AddStatusToOrdersTable extends Migration
      */
     public function down()
     {
-        Schema::table('orders', function (Blueprint $table) {
-            $table->dropColumn('status');
+        Schema::table('categories', function (Blueprint $table) {
+            $table->dropColumn('url_images');
         });
     }
 }

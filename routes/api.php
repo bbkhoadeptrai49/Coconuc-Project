@@ -63,9 +63,10 @@ Route::post('order/{user}','api\OrderController@store');
 //add product to details order create order
 Route::post('add-product-order/{order}/{product}', 'api\OrderController@addProductOrder');
 Route::put('update-cost-order/{order}','api\OrderController@updateCostOrder');
-//Route::delete('order/{id}', 'api\OrderController@delete');
+Route::put('update-status-order/{order}/{status}', 'api\OrderController@updateStatusOrder');
 
 Route::get('histories/{user}','api\HistoryController@getHistory');
+Route::get('histories-order/{user}', 'api\HistoryController@getOrderHistory');
 
 Route::post('search-product-by-name', 'api\SearchController@searchProduct');
 Route::post('search-product-by-name-type/{type}', 'api\SearchController@searchProductByNameType');

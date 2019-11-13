@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Categories;
 use Validator;
+use Cloudder;
 
 class CategoryController extends Controller
 {
@@ -40,14 +41,31 @@ class CategoryController extends Controller
                     'error' => 'category is exists'
                 ], 200);
         }
-        $category = Categories::create($request->all());
 
-    	return response()->json([$category, 'status'=> true]);
+        $category = new Categories;
+
+        if($request->hasFile('url_images')){
+            $file = $request->file('url_images');
+            $name = $file->getClientOriginalName();
+                
+            $img = str_random(5)."_".$name;
+            Cloudder::upload($file, 'Categories/'.$img);
+
+            $category->url_images = $img;
+            
+        } else {
+            $->url = 'no-image_bi4whx';
+        }
+
+        $category->category_name = $request['category_name'];
+
+        $category->save();
+
+        return response()->json([$category, 'status'=> true]);
     }
 	
 
     public function update(Request $request, $id){
-    	$category = Categories::find($id);
     	
         $validator = Validator::make($request->all(),
             [
@@ -69,8 +87,25 @@ class CategoryController extends Controller
                 ], 200);
     	}
 
-    	$input = $request->all();
-    	$category->update($input);
+        $category = Categories::find($id);
+
+        if($request->hasFile('url_images')){
+
+            Cloudder::destroyImage('images/'.$category->url_images);
+
+            $file = $request->file('url_images');
+            $name = $file->getClientOriginalName();
+                
+            $img = str_random(5)."_".$name;
+            Cloudder::upload($file, 'Categories/'.$img);
+
+            $category->url_images = $img;
+            
+        } 
+
+    	$category->request['category_name'];
+
+        $category->update();
 
     	return response()->json(['status' => true]);
     }

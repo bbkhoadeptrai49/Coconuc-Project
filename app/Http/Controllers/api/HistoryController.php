@@ -12,6 +12,5 @@ class HistoryController extends Controller
     	$history = Histories::where('histories_user_id_foreign', $userid)->get();
     	return response()->json($history);
     }
-
     
 }

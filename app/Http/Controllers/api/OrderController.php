@@ -62,8 +62,14 @@ class OrderController extends Controller
         $order->orders_user_id_foreign = $user;
         $order->coupon = '0';
         $order->adresss = $request['adress'];
-        $order->note = 'Đã thanh toán';
+        if($request['note'] === null) {
+            $order->note = 'Tiêu chuẩn';
+        } else {
+            $order->note = $request['note'];
+        }
+
         $order->costs = $request['costs'];
+        $order->status = 'Đang xử lý';
         $order->save();
 
         $history = new Histories;
@@ -73,6 +79,37 @@ class OrderController extends Controller
 
     	return response()->json($order);
     }
+
+    public function updateStatusOrder($orderid, $statusid){
+        while (Orders::where('id', $orderid)->exists()) {
+            $order = Orders::find($orderid);
+            switch ($statusid) {
+                case '1':
+                    $order->status = 'Đang đóng gói';
+                    $order->update();
+                    break;
+                case '2':
+                    $order->status = 'Đang vận chuyển';
+                    $order->update();
+                    break;
+                case '3':
+                    $order->status = 'Đã giao hàng';
+                    $order->update();
+                    break;
+                
+                default:
+                    $order->status = 'Đang xử lý';
+                    $order->update();
+                    break;
+            }
+
+            return response()->json(['status' => true]);
+        }
+
+
+        return response()->json(['status' => true]);
+    }
+
 
     public function addProductOrder(Request $request, $order, $product){
 

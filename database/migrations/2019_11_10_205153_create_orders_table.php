@@ -20,7 +20,7 @@ class CreateOrdersTable extends Migration
                 $table->string('coupon');
                 $table->mediumText('adresss');
                 $table->float('costs');
-                $table->mediumText('note');
+                $table->mediumText('note')->nullable();
                 $table->foreign('orders_user_id_foreign')->references('id')->on('users');
                 $table->timestamps();
             });
