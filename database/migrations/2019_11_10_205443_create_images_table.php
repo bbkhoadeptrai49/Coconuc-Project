@@ -13,13 +13,15 @@ class CreateImagesTable extends Migration
      */
     public function up()
     {
-        Schema::create('images', function (Blueprint $table) {
-            $table->bigIncrements('id');
-            $table->unsignedBigInteger('images_product_id_foreign');
-            $table->string('url');
-            $table->foreign('images_product_id_foreign')->references('id')->on('products');
-            $table->timestamps();
-        });
+        if(!Schema::hasTable('images')) {
+            Schema::create('images', function (Blueprint $table) {
+                $table->bigIncrements('id');
+                $table->unsignedBigInteger('images_product_id_foreign');
+                $table->string('url');
+                $table->foreign('images_product_id_foreign')->references('id')->on('products');
+                $table->timestamps();
+            });
+        }
     }
 
     /**

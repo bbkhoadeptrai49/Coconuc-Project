@@ -9,6 +9,7 @@ use App\Products;
 use App\Images;
 use App\Categories;
 use App\Types;
+use App\Orders;
 use Cloudder;
 
 class ProductController extends Controller
@@ -18,20 +19,24 @@ class ProductController extends Controller
         return response()->json($product);
     }
 
-    public function show($id){
-    	$product = Products::find($id);
-    	$img_arr = Images::where('images_product_id_foreign', $id)->get();
-    	$type = Types::where('types_categories_id_foreign', $product->products_type_id_foreign)->first();
-        $categories = Categories::where('id', $type->types_categories_id_foreign)->first();
-        foreach ($img_arr as $image) {
-       		if($image['url'] != null) {
-       			$img = Cloudder::show('images/'.$image->url);
-       			$image->url = $img;
-       		}
-       	}
+    public function show($productid){
 
+        if(Products::where('id', $productid)->exists()){
+            $product = Products::find($productid);
+            $img_arr = Images::where('images_product_id_foreign', $productid)->get();
+            $type = Types::where('id', $product->products_type_id_foreign)->first();
+            foreach ($img_arr as $image) {
+                 if($image['url'] != null) {
+                     $img = Cloudder::show('images/'.$image->url);
+                     $image->url = $img;
+                 }
+            }
+            $categories = Categories::where('id', $type->types_categories_id_foreign)->first();
+            return response()->json(['info' => $product, 'images' => $img_arr, 'categoryID' => $categories->id]);
 
-    	return response()->json(['info' => $product, 'images' => $img_arr, 'categoryID' => $categories->id]);
+        }
+
+        return response()->json(['status' => false]);
     }
 
     public function store(Request $request){
@@ -108,17 +113,17 @@ class ProductController extends Controller
 
     public function delete($id) {
 
-    	while (Images::where('images_product_id_foreign', $id)->exists()) {
+    	while (Images::where('images_product_id_foreign', $id)->exists() && Orders::where('orders_user_id_foreign', $id)->exists()) {
             return response()->json(
                 [
                     'status' => false
-                ], 400);
+                ]);
         }
 
     	$product = Products::find($id);
-    	$product->delete();
+        $product->delete();
 
-    	return response()->json(['status' => true], 200);
+    	return response()->json(['status' => true]);
     }
 
     public function getByType($typeid){

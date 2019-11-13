@@ -13,12 +13,14 @@ class CreateTypesTable extends Migration
      */
     public function up()
     {
-        Schema::create('types', function (Blueprint $table) {
-            $table->bigIncrements('id');
-            $table->string('type_name');
-            $table->unsignedBigInteger('types_categories_id_foreign');
-            $table->foreign('types_categories_id_foreign')->references('id')->on('categories');
-        });
+        if(!Schema::hasTable('types')) {
+            Schema::create('types', function (Blueprint $table) {
+                $table->bigIncrements('id');
+                $table->string('type_name');
+                $table->unsignedBigInteger('types_categories_id_foreign');
+                $table->foreign('types_categories_id_foreign')->references('id')->on('categories');
+            });
+        }
     }
 
     /**

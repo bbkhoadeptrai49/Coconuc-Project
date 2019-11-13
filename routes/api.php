@@ -67,3 +67,12 @@ Route::put('update-cost-order/{order}','api\OrderController@updateCostOrder');
 
 Route::get('histories/{user}','api\HistoryController@getHistory');
 
+Route::post('search-product-by-name', 'api\SearchController@searchProduct');
+Route::post('search-product-by-name-type/{type}', 'api\SearchController@searchProductByNameType');
+
+Route::get('cart/{user}','api\CartController@show');
+Route::post('cart/{user}/{product}','api\CartController@store');
+Route::post('cart-pay/{user}','api\CartController@cartPay');
+Route::put('cart-delete-item/{user}/{product}', 'api\CartController@cartDeleteItem');
+Route::put('cart-update-item/{user}/{product}', 'api\CartController@cartUpdateItem');
+

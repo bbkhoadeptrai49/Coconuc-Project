@@ -60,7 +60,7 @@ class UserController extends Controller
                 [
                     'success' => 'successfully',
                     'userid' => $user->id,
-                    'shopID' => false
+                    'shopID' => 0
                 ],
                 200
                 
@@ -123,7 +123,7 @@ class UserController extends Controller
 
         return response()->json(
             [
-                'status' => true
+                'status' => true, 'userid' => $user->id
             ],
             $this->successStatus
         );

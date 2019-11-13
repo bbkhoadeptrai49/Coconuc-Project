@@ -13,16 +13,18 @@ class CreateOrdersTable extends Migration
      */
     public function up()
     {
-        Schema::create('orders', function (Blueprint $table) {
-            $table->bigIncrements('id');
-            $table->unsignedBigInteger('orders_user_id_foreign');
-            $table->string('coupon');
-            $table->mediumText('adresss');
-            $table->float('costs');
-            $table->mediumText('note');
-            $table->foreign('orders_user_id_foreign')->references('id')->on('users');
-            $table->timestamps();
-        });
+        if(!Schema::hasTable('orders')) {
+            Schema::create('orders', function (Blueprint $table) {
+                $table->bigIncrements('id');
+                $table->unsignedBigInteger('orders_user_id_foreign');
+                $table->string('coupon');
+                $table->mediumText('adresss');
+                $table->float('costs');
+                $table->mediumText('note');
+                $table->foreign('orders_user_id_foreign')->references('id')->on('users');
+                $table->timestamps();
+            });
+        }
     }
 
     /**

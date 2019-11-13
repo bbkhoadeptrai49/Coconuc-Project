@@ -13,13 +13,15 @@ class CreateShopsTable extends Migration
      */
     public function up()
     {
-        Schema::create('shops', function (Blueprint $table) {
-            $table->bigIncrements('id');
-            $table->unsignedBigInteger('shops_user_id_foreign');
-            $table->string('shop_name');
-            $table->foreign('shops_user_id_foreign')->references('id')->on('users');
-            $table->timestamps();
-        });
+        if(!Schema::hasTable('shops')) {
+            Schema::create('shops', function (Blueprint $table) {
+                $table->bigIncrements('id');
+                $table->unsignedBigInteger('shops_user_id_foreign');
+                $table->string('shop_name');
+                $table->foreign('shops_user_id_foreign')->references('id')->on('users');
+                $table->timestamps();
+            });
+        }
     }
 
     /**
