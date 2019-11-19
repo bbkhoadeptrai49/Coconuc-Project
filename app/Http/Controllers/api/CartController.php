@@ -25,7 +25,7 @@ class CartController extends Controller
     			$cart->quantity = $quantity;
     			$cart->update();
 
-    			return response()->json(['status' => true]);
+    			return response()->json(['status' => true, 'exists' => true]);
     		}
 
 	    	$product = Products::where('id', $productid)->first();
