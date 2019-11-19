@@ -16,7 +16,7 @@ class ImageController extends Controller
         $img_arr = Images::where('images_product_id_foreign', $productid)->get();
     	foreach ($img_arr as $image) {
        		if($image['url'] != null) {
-       			$img = Cloudder::show('images/'.$image->url);
+       			$img = Cloudder::show('images/'.$image->url, array("width" => 250, "height" => 250, "crop" => "fill"));
        			$image->url = $img;
        		}
        	}
@@ -89,7 +89,7 @@ class ImageController extends Controller
     	return response()->json(['status' => true]);
     }
 
-     public function delete($id) {
+    public function delete($id) {
     	$images = Images::find($id);
     	Cloudder::destroyImage('images/'.$images->url);
     	$images->delete();

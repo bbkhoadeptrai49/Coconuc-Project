@@ -21,7 +21,7 @@ class UserController extends Controller
 
        	foreach ($user_arr as $user) {
        		if($user['url_images'] != null) {
-       			$img = Cloudder::show('avatar/'.$user->url_images);
+       			$img = Cloudder::show('avatar/'.$user->url_images, array("width" => 250, "height" => 250, "crop" => "fill"));
        			$user->url_images = $img;
        		}
        	}
@@ -54,8 +54,6 @@ class UserController extends Controller
                 );
             }
             
-
-
             return response()->json(
                 [
                     'success' => 'successfully',
@@ -132,7 +130,7 @@ class UserController extends Controller
 
     public function getUser($id){
     	$user = User::find($id);
-    	$user->url_images = Cloudder::show('avatar/'.$user->url_images);
+    	$user->url_images = Cloudder::show('avatar/'.$user->url_images, array("width" => 250, "height" => 250, "crop" => "fill"));
         return response()->json($user);
     }
 

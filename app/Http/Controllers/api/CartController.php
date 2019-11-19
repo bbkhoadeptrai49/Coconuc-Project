@@ -84,7 +84,7 @@ class CartController extends Controller
     	$cart_arr = Carts::where('carts_user_id_foreign', $userid)->where('status', '=', 0)->get();
         if($cart_arr != null) {
             foreach ($cart_arr as $cart) {    
-                $img = Cloudder::show('images/'.$cart->url);
+                $img = Cloudder::show('images/'.$cart->url, array("width" => 250, "height" => 250, "crop" => "fill"));
                 $cart->url = $img;
             }
             return response()->json($cart_arr);

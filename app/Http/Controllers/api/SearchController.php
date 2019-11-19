@@ -18,7 +18,7 @@ class SearchController extends Controller
             foreach ($product as $p) {
                 $img = Images::where('images_product_id_foreign', $p->id)->first();
                 if($img != null) {
-                     $p['url_images'] = Cloudder::show('images/'.$img->url);
+                     $p['url_images'] = Cloudder::show('images/'.$img->url, array("width" => 250, "height" => 250, "crop" => "fill"));
                 }
                 else {
                     $p['url_images'] = Cloudder::show('images/no-image_bi4whx');
@@ -38,7 +38,7 @@ class SearchController extends Controller
             foreach ($product as $p) {
                 $img = Images::where('images_product_id_foreign', $p->id)->first();
                 if($img != null) {
-                     $p['url_images'] = Cloudder::show('images/'.$img->url);
+                     $p['url_images'] = Cloudder::show('images/'.$img->url, array("width" => 250, "height" => 250, "crop" => "fill"));
                 }
                 else {
                     $p['url_images'] = Cloudder::show('images/no-image_bi4whx');

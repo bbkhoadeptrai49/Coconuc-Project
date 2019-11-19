@@ -27,7 +27,7 @@ class ProductController extends Controller
             $type = Types::where('id', $product->products_type_id_foreign)->first();
             foreach ($img_arr as $image) {
                  if($image['url'] != null) {
-                     $img = Cloudder::show('images/'.$image->url);
+                     $img = Cloudder::show('images/'.$image->url, array("width" => 250, "height" => 250, "crop" => "fill"));
                      $image->url = $img;
                  }
             }
