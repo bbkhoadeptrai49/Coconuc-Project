@@ -10,6 +10,7 @@ use App\Images;
 use App\Shops;
 use App\User;
 use App\Carts;
+use Cloudder;
 
 class CartController extends Controller
 {
@@ -34,8 +35,13 @@ class CartController extends Controller
 	    	$cart = new Carts;
 	    	$cart->product_name = $product->product_name;
 	    	$cart->price = $product->price;
-	    	$cart->providers = $shop->shop_name; 
-	    	$cart->url = $img->url;
+	    	$cart->providers = $shop->shop_name;
+            if($img != null){
+                $cart->url = $img->url;
+            } else {
+                $cart->url = 'no-image_bi4whx';
+            }
+
 	    	$cart->quantity = $request['quantity'];
 	    	$cart->carts_user_id_foreign = $userid;
 	    	$cart->carts_product_id_foreign = $productid;
@@ -50,9 +56,9 @@ class CartController extends Controller
 
     public function cartDeleteItem($userid, $productid) {
     	while (Carts::where('carts_product_id_foreign', $productid)->where('carts_user_id_foreign', $userid)->exists()) {
-    		$item = Carts::where('carts_product_id_foreign', $productid)->where('carts_user_id_foreign', $userid)->first();
+    		$item = Carts::where('carts_product_id_foreign', $productid)->where('carts_user_id_foreign', $userid)->where('status', '=', 0)->first();
 	    	$item->status = 2;
-	    	$item->save();
+	    	$item->update();
 	    	return response()->json(['status' => true]);
     	}
     	
@@ -64,7 +70,7 @@ class CartController extends Controller
     	while (Carts::where('carts_product_id_foreign', $productid)->where('carts_user_id_foreign', $userid)->exists()) {
     		$item = Carts::where('carts_product_id_foreign', $productid)->where('carts_user_id_foreign', $userid)->where('status', '=', 0)->first();
 
-    		$quantity = $item->quantity + $request['quantity'];
+    		$quantity = $request['quantity'];
     		$item->quantity = $quantity;
     		$item->update();
 
@@ -75,8 +81,16 @@ class CartController extends Controller
     }
 
     public function show($userid) {
-    	$cart = Carts::where('carts_user_id_foreign', $userid)->where('status', '=', 0)->get();
-    	return response()->json($cart);
+    	$cart_arr = Carts::where('carts_user_id_foreign', $userid)->where('status', '=', 0)->get();
+        if($cart_arr != null) {
+            foreach ($cart_arr as $cart) {    
+                $img = Cloudder::show('images/'.$cart->url);
+                $cart->url = $img;
+            }
+            return response()->json($cart_arr);
+        }
+
+    	return response()->json(['status' => flase]);
     }
 
     public function cartPay($userid){

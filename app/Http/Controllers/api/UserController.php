@@ -142,7 +142,9 @@ class UserController extends Controller
         $validator = Validator::make($request->all(),
             [
                 'name' => 'required',
-                'phone' => 'required|min:10'
+                'phone' => 'required|min:10',
+                'address' => 'required',
+                'birthday' => 'required'
             ]
         );
 
@@ -159,6 +161,7 @@ class UserController extends Controller
         $user->phone = $input['phone'];
         $user->birthday = $input['birthday'];
         $user->sex = $input['sex'];
+        $user->address = $input['address'];
 
         if($request->hasFile('url_images')){
             $file = $request->file('url_images');
@@ -167,11 +170,14 @@ class UserController extends Controller
             $img = str_random(5)."_".$name;
             Cloudder::upload($file, 'avatar/'.$img);
             $user->url_images = $img;
-        } 
+        } else {
+            $img = $user->url_images;
+            $user->url_images = $img;
+        }
 
         $user->update();
        
-        return response()->json(['status'=> true], $this->successStatus);
+        return response()->json(['status'=> true]);
     }
 
     public function createShop($userid, Request $request){
