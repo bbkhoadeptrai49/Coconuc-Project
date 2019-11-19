@@ -23,6 +23,7 @@ Route::post('register', 'api\UserController@register');
 Route::post('user/{id}', 'api\UserController@update');
 Route::get('user/{id}', 'api\UserController@getUser');
 Route::get('user', 'api\UserController@index');
+Route::post('user-avatar/{id}', 'api\UserController@updateAvatar');
 
 Route::post('shop/{id}', 'api\UserController@createShop');
 Route::get('shop/{user}', 'api\UserController@getShop');
@@ -70,6 +71,7 @@ Route::get('histories-order/{user}', 'api\HistoryController@getOrderHistory');
 
 Route::post('search-product-by-name', 'api\SearchController@searchProduct');
 Route::post('search-product-by-name-type/{type}', 'api\SearchController@searchProductByNameType');
+Route::post('search-product-by-price/{price}', 'api\SearchController@searchProductByPrice');
 
 Route::get('cart/{user}','api\CartController@show');
 Route::post('cart/{user}/{product}','api\CartController@store');

@@ -37,7 +37,7 @@ class ImageController extends Controller
                     'error' => $validator->errors()
                 ], 400);
         }
-  	
+
   		while (Products::where('id', $productid)->exists()) {
   			  $Images = new Images;
 	        $Images->images_product_id_foreign = $productid;
@@ -47,7 +47,7 @@ class ImageController extends Controller
 	            $name = $file->getClientOriginalName();
 	            
 	            $img = str_random(5)."_".$name;
-	        	Cloudder::upload($file, 'Images/'.$img);
+	        	  Cloudder::upload($file, 'Images/'.$img);
 
 	            $Images->url = $img;
 	        
@@ -65,13 +65,12 @@ class ImageController extends Controller
     }
 
      public function update(Request $request, $id){
+
     	$images = Images::find($id);
     	
     	if(empty($images)){
     		return response()->json(
-                [
-                    'error' => 'not exists'
-                ], 204);
+                ['status' => false]);
     	}
     	
     	if($request->hasFile('url')){

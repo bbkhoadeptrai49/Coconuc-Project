@@ -162,22 +162,30 @@ class UserController extends Controller
         $user->birthday = $input['birthday'];
         $user->sex = $input['sex'];
         $user->address = $input['address'];
-
-        if($request->hasFile('url_images')){
-            $file = $request->file('url_images');
-            $name = $file->getClientOriginalName();
-            
-            $img = str_random(5)."_".$name;
-            Cloudder::upload($file, 'avatar/'.$img);
-            $user->url_images = $img;
-        } else {
-            $img = $user->url_images;
-            $user->url_images = $img;
-        }
-
         $user->update();
        
         return response()->json(['status'=> true]);
+    }
+
+    public function updateAvatar(Request $request, $id) {
+        while (User::where('id', $id)->exists()) {
+           $user = User::find($id);
+
+            if($request->hasFile('url_images')){
+                $file = $request->file('url_images');
+                $name = $file->getClientOriginalName();
+                
+                $img = str_random(5)."_".$name;
+                Cloudder::upload($file, 'avatar/'.$img);
+                $user->url_images = $img;
+            } 
+
+            $user->update();
+            return response()->json(['status'=> true]);
+        }
+
+        return response()->json(['status'=> false]);
+        
     }
 
     public function createShop($userid, Request $request){

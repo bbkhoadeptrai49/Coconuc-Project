@@ -119,11 +119,20 @@ class ProductController extends Controller
                     'status' => false
                 ]);
         }
+        $img_arr = Images::where('images_product_id_foreign', $id)->get();
+        foreach ($img_arr as $img) {    
+            $img->delete();   
+        }
 
-    	$product = Products::find($id);
-        $product->delete();
+        while (Products::where('id', $id)->exists()) {
+           $product = Products::find($id);
+            $product->delete();
 
-    	return response()->json(['status' => true]);
+            return response()->json(['status' => true]);
+        }
+
+        return response()->json(['status' => false]);
+    	
     }
 
     public function getByType($typeid){
