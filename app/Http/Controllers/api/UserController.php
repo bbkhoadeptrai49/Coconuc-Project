@@ -130,7 +130,15 @@ class UserController extends Controller
 
     public function getUser($id){
     	$user = User::find($id);
-    	$user->url_images = Cloudder::show('avatar/'.$user->url_images, array("width" => 250, "height" => 250, "crop" => "fill"));
+        $user->url_images = Cloudder::show('avatar/'.$user->url_images, array("width" => 250, "height" => 250, "crop" => "fill"));
+        while (Shops::where('shops_user_id_foreign', $id)->exists()) {
+                $shop = Shops::where('shops_user_id_foreign', $id)->first();
+                $user['shopID'] = $shop->id;
+                return  response()->json($user);
+        }
+
+        $user['shopID'] = 0;
+    	
         return response()->json($user);
     }
 
