@@ -10,6 +10,7 @@ use App\Images;
 use App\Categories;
 use App\Types;
 use App\Orders;
+use App\Shops;
 use Cloudder;
 
 class ProductController extends Controller
@@ -22,7 +23,7 @@ class ProductController extends Controller
     public function show($productid){
 
         if(Products::where('id', $productid)->exists()){
-            $product = Products::find($productid);
+            $product = Products::select('products.*','shop_name')->where('products.id', $productid)->join('shops','shops.id', '=' ,'products.products_shop_id_foreign')->first();
             $img_arr = Images::where('images_product_id_foreign', $productid)->get();
             $type = Types::where('id', $product->products_type_id_foreign)->first();
             foreach ($img_arr as $image) {
@@ -32,6 +33,8 @@ class ProductController extends Controller
                  }
             }
             $categories = Categories::where('id', $type->types_categories_id_foreign)->first();
+          
+
             return response()->json(['info' => $product, 'images' => $img_arr, 'categoryID' => $categories->id]);
 
         }
