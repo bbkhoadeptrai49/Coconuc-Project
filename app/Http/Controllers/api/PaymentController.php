@@ -1,7 +1,6 @@
 <?php
 
 namespace App\Http\Controllers\api;
-
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use PayPal\Api\Amount;
@@ -18,7 +17,6 @@ use PayPal\Api\ShippingAddress;
 use Session;
 use PayPal\Api\PaymentExecution;
 use App\Carts;
-
 /**
  * Class PaymentController
  * @package App\Http\Controllers\api
@@ -36,7 +34,6 @@ class PaymentController extends Controller
         );
         $this->apiContext->setConfig(config('paypal.settings'));
     }
-
     /**
      * Display a listing of the resource.
      *
@@ -46,7 +43,6 @@ class PaymentController extends Controller
     {
         //
     }
-
     /**
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse
@@ -55,15 +51,11 @@ class PaymentController extends Controller
     {
         $payment_id = Session::get('payment_id');
         Session::forget('payment_id');
-
         $execution = new PaymentExecution();
         $execution->setPayerId($request->input('PayerID'));
-
         $payment = Payment::get($payment_id, $this->apiContext);
-
         try {
             $result = $payment->execute($execution, $this->apiContext);
-
             if ($result->getState() == 'approved') {
                 return response()->json(['status' => true]);
             }
@@ -72,7 +64,6 @@ class PaymentController extends Controller
             return response()->json(['status' => false]);
         }
     }
-
     /**
      * @param Request $request
      * @param int $userId
@@ -81,14 +72,10 @@ class PaymentController extends Controller
     public function store(Request $request, $userId)
     {
         if (Carts::where('carts_user_id_foreign', $userId)->exists()) {
-
             $subTotalPrice = 0;
-
             $cart_list = Carts::where('carts_user_id_foreign', $userId)->get();
-
             $payer = new Payer();
             $payer->setPaymentMethod("paypal");
-
             $array_item = [];
             foreach ($cart_list as $item) {
                 $subTotalPrice += $item['price'];
@@ -99,7 +86,6 @@ class PaymentController extends Controller
                     ->setPrice($item['price']);
                 $array_item[] = $item_temp;
             }
-
             $shipping = new ShippingAddress();
             $shipping->setLine1('123 1st St.')
                 ->setCity('Ho Chi Minh')
@@ -107,43 +93,35 @@ class PaymentController extends Controller
                 ->setPostalCode("70000")
                 ->setCountryCode("VN")
                 ->setPhone("84930000000");
-
             $itemList = new ItemList();
             $itemList->setItems($array_item)
                      ->setShippingAddress($shipping);
-
             $details = new Details();
             $details->setShipping(0)
                 ->setTax(0)
                 ->setSubtotal($subTotalPrice);
-
             $amount = new Amount();
             $amount->setCurrency("VND")
                 ->setTotal($subTotalPrice + $details->getShipping() + $details->getTax())
                 ->setDetails($details);
-
             $transaction = new Transaction();
             $transaction->setAmount($amount)
                 ->setItemList($itemList)
                 ->setDescription("Payment description")
                 ->setInvoiceNumber(uniqid());
-
             $redirectUrls = new RedirectUrls();
             $redirectUrls->setReturnUrl(route('payment.create'))
                 ->setCancelUrl(route('payment.create'));
-
             $payment = new Payment();
             $payment->setIntent("sale")
                 ->setPayer($payer)
                 ->setRedirectUrls($redirectUrls)
                 ->setTransactions(array($transaction));
-
             try {
                 $payment->create($this->apiContext);
             } catch (\PayPal\Exception\PPConnectionException $paypalException) {
                 throw new \Exception($paypalException->getMessage());
             }
-
             $approvalUrl = $payment->getApprovalLink();
             Session::put('payment_id', $payment->id);
             return redirect()->to($approvalUrl);
@@ -152,7 +130,6 @@ class PaymentController extends Controller
             return response()->json(['status' => false]);
         }
     }
-
     /**
      * Display the specified resource.
      *
@@ -163,7 +140,6 @@ class PaymentController extends Controller
     {
         //
     }
-
     /**
      * Show the form for editing the specified resource.
      *
@@ -174,7 +150,6 @@ class PaymentController extends Controller
     {
         //
     }
-
     /**
      * Update the specified resource in storage.
      *
@@ -186,7 +161,6 @@ class PaymentController extends Controller
     {
         //
     }
-
     /**
      * Remove the specified resource from storage.
      *

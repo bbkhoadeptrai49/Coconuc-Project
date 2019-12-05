@@ -9,6 +9,9 @@ use App\Orders;
 use App\Products;
 use App\DetailsOrder;
 use App\Histories;
+use App\User;
+use App\Images;
+use Cloudder;
 
 class OrderController extends Controller
 {
@@ -16,8 +19,12 @@ class OrderController extends Controller
 	public function getOrder($orderid){
 		while(Orders::where('id', $orderid)->exists()) {
 			$order = Orders::where('id', $orderid)->first();
+            $user = User::where('id', $order->orders_user_id_foreign)->first();
+            $img = Cloudder::show('avatar/'.$user->url_images, array("width" => 250, "height" => 250, "crop" => "fill"));
+            $partner['name'] =  $user->name;
+            $partner['avatar'] = $img; 
 
-			return response()->json($order);
+			return response()->json(['order' => $order, 'partner' => $partner]);
 		}
 
 		return response()->json(['status' => false]);
@@ -36,7 +43,20 @@ class OrderController extends Controller
 	public function getDetailOrder($orderid){
 		while(DetailsOrder::where('details_order_oders_id_foreign', $orderid)->exists()) {
 			$order = DetailsOrder::where('details_order_oders_id_foreign', $orderid)->get();
-
+            if($order != null) {
+                foreach ($order as $od) {
+                    $img = Images::where('images_product_id_foreign', $od->details_order_product_id_foreign)->first();
+                    if($img != null) {
+                         $od['url_images'] = Cloudder::show('images/'.$img->url, array("width" => 250, "height" => 250, "crop" => "fill"));
+                    }
+                    else {
+                        $od['url_images'] = Cloudder::show('images/no-image_bi4whx');
+                    }
+                    $name = Products::select('product_name')->where('id','=', $od->details_order_product_id_foreign)->first();
+                    $od['product_name'] = $name['product_name'];
+                   
+                }
+            }
 			return response()->json($order);
 		}
 
@@ -67,6 +87,7 @@ class OrderController extends Controller
         } else {
             $order->note = $request['note'];
         }
+        $order->delivery_charges = $request['delivery_charges'];
 
         $order->costs = $request['costs'];
         $order->status = 'Đang xử lý';
@@ -85,15 +106,18 @@ class OrderController extends Controller
             $order = Orders::find($orderid);
             switch ($statusid) {
                 case '1':
-                    $order->status = 'Đang đóng gói';
+                    $order->status = 'Đang gửi hàng';
                     $order->update();
                     break;
-                case '2':
-                    $order->status = 'Đang vận chuyển';
+                 case '2':
+                    $order->status = 'Đã nhận hàng';
                     $order->update();
-                    break;
                 case '3':
-                    $order->status = 'Đã giao hàng';
+                    $order->status = 'Đã hủy';
+                    $order->update();
+                    break;
+                case '4':
+                    $order->status = 'Hoàn thành';
                     $order->update();
                     break;
                 

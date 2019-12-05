@@ -1,5 +1,4 @@
 <?php
-
 return [
     'client_id' => 'AbIE42uu9seZh8UHq3783CD5QS5IIOzXuH08Aosv5-iReAcxAxkXThPJlDaTFFtbrBJxWLPF5aJTApcp',
     'secret' => 'EFZyGrlQFHDN24cXqHZXqdxJum9i4KAMAaVjZyOO_kWdrFK3hgcjtWKTmkU8ZSb76XOwbe6sHjRSe2AL',
