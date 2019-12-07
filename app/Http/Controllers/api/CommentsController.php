@@ -40,4 +40,29 @@ class CommentsController extends Controller
             return response()->json(['status' => false]);
         }
     }
+
+    public function updateComment(Request $request, $commentId){
+        if (Comment::where('id', $commentId)->exists()) {
+            $comment = Comment::find($commentId);
+            $comment->title = $request['title'];
+            $comment->comment = $request['comment'];
+            $comment->update();
+
+            return response()->json(['status' => true]);
+        }
+        else {
+            return response()->json(['status' => false]);
+        }
+    }
+
+    public function deleteComment($commentId) {
+        if (Comment::where('id', $commentId)->exists()) {
+            $comment = Comment::find($commentId);
+            $comment->delete();
+            return response()->json(['status' => true]);
+        }
+        else {
+            return response()->json(['status' => false]);
+        }
+    }
 }
