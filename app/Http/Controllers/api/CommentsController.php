@@ -27,7 +27,7 @@ class CommentsController extends Controller
             $comments->comments_user_id_foreign = $userId;
             $comments->comments_product_id_foreign = $productId;
             $comments->comment = $request['comment'];
-            $comments->level = 1;
+            $comments->level = $request['level'];
             $comments->save();
             return response()->json(['status' => true]);
         }
@@ -72,8 +72,7 @@ class CommentsController extends Controller
                 'title' => $comment['title'],
                 'level' => $comment['level'],
                 'product_id' => $comment['comments_product_id_foreign'],
-                'date' => $comment->created_at->format('d-m-Y'),
-                'time' => $comment->created_at->format('h:i')
+                'date' => $comment->created_at->format('d-m-Y')
             ];
 
             return response()->json($result);
