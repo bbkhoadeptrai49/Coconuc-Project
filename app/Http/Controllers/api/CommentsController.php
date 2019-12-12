@@ -88,19 +88,6 @@ class CommentsController extends Controller
                 }
                 return response()->json($result);
             }
-
-//            $user = User::find($comment['comments_user_id_foreign']);
-//            $user_name = $user['name'];
-//            $result = [
-//                'user_name' => $user_name,
-//                'comment' => $comment['comment'],
-//                'title' => $comment['title'],
-//                'level' => $comment['level'],
-//                'product_id' => $comment['comments_product_id_foreign'],
-//                'date' => $comment->created_at->format('d-m-Y')
-//            ];
-//
-//            return response()->json($result);
         }
         else {
             return response()->json(['status' => false]);
