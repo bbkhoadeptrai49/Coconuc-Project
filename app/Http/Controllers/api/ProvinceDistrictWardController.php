@@ -16,25 +16,25 @@ class ProvinceDistrictWardController extends Controller
     //     }
     //     return response()->json($province_list);
     // }
-    // public function getDistrictByProvince($provinceId) {
-    //     while(ProvinceDistrictWard::where('province_id', $provinceId)->exists()) {
-    //         $district_list = ProvinceDistrictWard::where('province_id', $provinceId)->get();
-    //         $district_name_id_list = [];
-    //         if ($district_list->isEmpty()) {
-    //             return response()->json(
-    //                 ['error' => 'districts are null']
-    //             );
-    //         }
-    //         foreach ($district_list as $item) {
-    //             $district_name_id_list[] = [
-    //                 'district_name' => $item['district_name'],
-    //                 'district_id' => $item['district_id']
-    //             ];
-    //         }
-    //         return response()->json($district_name_id_list);
-    //     }
-    //     return response()->json(['status' => false]);
-    // }
+     public function getDistrictByProvince($provinceId) {
+         while(ProvinceDistrictWard::where('province_id', $provinceId)->exists()) {
+             $district_list = ProvinceDistrictWard::where('province_id', $provinceId)->get();
+             $district_name_id_list = [];
+             if ($district_list->isEmpty()) {
+                 return response()->json(
+                     ['error' => 'districts are null']
+                 );
+             }
+             foreach ($district_list as $item) {
+                 $district_name_id_list[] = [
+                     'district_name' => $item['district_name'],
+                     'district_id' => $item['district_id']
+                 ];
+             }
+             return response()->json($district_name_id_list);
+         }
+         return response()->json(['status' => false]);
+     }
     // public function getWardbyDistrict($districtId){
     //     while(ProvinceDistrictWard::where('district_id', $districtId)->exists()) {
     //         $ward_list = ProvinceDistrictWard::where('district_id', $districtId)->get();
@@ -65,5 +65,5 @@ class ProvinceDistrictWardController extends Controller
         return response()->json($response);
     }
 
-    
+
 }

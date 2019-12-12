@@ -79,7 +79,7 @@ Route::post('cart-pay/{user}','api\CartController@cartPay');
 Route::put('cart-delete-item/{user}/{product}', 'api\CartController@cartDeleteItem');
 Route::put('cart-update-item/{user}/{product}', 'api\CartController@cartUpdateItem');
 
-Route::get('get-comment/{commentId}', 'api\CommentsController@getComment');
+Route::get('get-comment/{productId}', 'api\CommentsController@getComment');
 Route::post('save-comment/{userId}/{productId}', 'api\CommentsController@saveComment');
 Route::put('update-comment/{commentId}', 'api\CommentsController@updateComment');
 Route::delete('delete-comment/{commentId}', 'api\CommentsController@deleteComment');
